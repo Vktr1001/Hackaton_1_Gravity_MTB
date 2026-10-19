@@ -23,12 +23,18 @@ Las pruebas del carrito están en `tests/index.html`.
 index.html          Estructura y contenido de la página
 css/styles.css      Estilos organizados por secciones con variables CSS
 js/products.js      Catálogo de productos y servicios
-js/art.js           Ilustraciones SVG de cada artículo
+js/art.js           Ilustraciones SVG de los servicios e ícono de respaldo
 js/cart.js          Lógica del carrito (sin DOM, fácil de probar)
 js/app.js           Interfaz: render, eventos y animaciones
+img/products/       Fotos oficiales de los productos
 tests/              Pruebas unitarias del carrito en el navegador
 ```
 
 ## Herramientas
 
 HTML5, CSS3 (sin frameworks), JavaScript (vanilla) y Visual Studio Code.
+
+## Créditos de imágenes
+
+Las fotos en `img/products/` son imágenes oficiales de YT Industries, Alpinestars, Fox Factory y Maxxis,
+usadas solo como referencia en este proyecto académico sin fines comerciales. Pertenecen a sus respectivas marcas.

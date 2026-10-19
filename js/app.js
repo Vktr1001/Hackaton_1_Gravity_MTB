@@ -120,6 +120,13 @@
     return `<span class="level level--${level} card__level">${LEVEL_LABELS[level]}</span>`;
   }
 
+  /** Foto del producto o, si no tiene (servicios), su ilustración SVG. */
+  function mediaTemplate(item) {
+    if (!item.image) return getArt(item.art);
+    return `<img src="${item.image}" alt="${item.brand || ""} ${item.name}" loading="lazy"
+                 decoding="async" data-photo>`;
+  }
+
   function specsList(specs = []) {
     return `<ul class="card__specs">${specs.map((spec) => `<li>${spec}</li>`).join("")}</ul>`;
   }
@@ -136,17 +143,21 @@
 
     return `
       <article class="card ${isService ? "card--service" : ""}" data-category="${item.category}" style="--i:${index}">
-        <div class="card__art">
-          ${getArt(item.art)}
+        <div class="card__art ${item.image ? "has-photo" : ""}">
+          ${mediaTemplate(item)}
           ${levelBadge(item.level)}
           ${item.tag ? `<span class="card__tag">${item.tag}</span>` : ""}
         </div>
         <div class="card__body">
+          ${item.brand ? `<p class="card__brand">${item.brand}</p>` : ""}
           <h3 class="card__title">${item.name}</h3>
           <p class="card__text">${item.description}</p>
           ${specsList(item.specs)}
           <div class="card__footer">
-            <p class="card__price">${currency.format(item.price)}<small>${priceNote}</small></p>
+            <p class="card__price">
+              ${item.oldPrice ? `<s class="card__old-price">${currency.format(item.oldPrice)}</s>` : ""}
+              ${currency.format(item.price)}<small>${priceNote}</small>
+            </p>
             <button class="btn btn--primary add-btn" type="button" data-add="${item.id}"
                     data-label="${buttonLabel}" aria-label="${buttonLabel} ${item.name}">
               ${buttonLabel}
@@ -160,7 +171,7 @@
     const atLimit = item.qty >= item.stock;
     return `
       <li class="cart-item" data-id="${item.id}">
-        <div class="cart-item__art">${getArt(item.art)}</div>
+        <div class="cart-item__art ${item.image ? "has-photo" : ""}">${mediaTemplate(item)}</div>
         <div>
           <p class="cart-item__name">${item.name}</p>
           <p class="cart-item__price">${currency.format(item.price)} c/u</p>
@@ -256,9 +267,9 @@
     }
 
     const product = cart.getProduct(id);
-    const art = button.closest(".card").querySelector(".card__art svg");
+    const media = button.closest(".card").querySelector(".card__art img, .card__art svg");
 
-    flyToCart(art, product.art);
+    flyToCart(media, product);
     flashButton(button);
     renderCart();
     showToast(`${product.name} agregado al carrito.`);
@@ -353,7 +364,7 @@
    * siguiendo una parábola: el eje X se mueve lineal y el eje Y con
    * una curva que primero sube y luego cae.
    */
-  function flyToCart(sourceEl, artName) {
+  function flyToCart(sourceEl, product) {
     if (!sourceEl || prefersReducedMotion) {
       bumpCart();
       return;
@@ -368,7 +379,9 @@
     outer.className = "fly-item";
     outer.style.cssText = `left:${from.left + (from.width - size) / 2}px; top:${from.top + (from.height - size) / 2}px; width:${size}px; height:${size}px;`;
     inner.style.cssText = "width:100%; height:100%;";
-    inner.innerHTML = getArt(artName);
+    inner.innerHTML = sourceEl.tagName === "IMG"
+      ? `<img src="${sourceEl.currentSrc}" alt="">`
+      : getArt(product.art);
     outer.append(inner);
     document.body.append(outer);
 
@@ -390,6 +403,18 @@
       outer.remove();
       bumpCart();
     });
+  }
+
+  /**
+   * Si una foto no carga (sin conexión, archivo faltante), se cambia por
+   * el ícono genérico de montaña para que la tarjeta nunca quede vacía.
+   */
+  function handleImageError(event) {
+    const img = event.target;
+    if (!(img instanceof HTMLImageElement) || !img.hasAttribute("data-photo")) return;
+
+    img.parentElement.classList.remove("has-photo");
+    img.outerHTML = getArt();
   }
 
   /** Pequeño rebote del botón del carrito. */
@@ -489,6 +514,9 @@
     dom.productGrid.addEventListener("click", handleAddClick);
     dom.serviceGrid.addEventListener("click", handleAddClick);
     dom.cartList.addEventListener("click", handleCartClick);
+
+    // "error" no burbujea: se escucha en fase de captura para todas las fotos
+    document.addEventListener("error", handleImageError, true);
     dom.cartBtn.addEventListener("click", openCart);
     dom.cartClose.addEventListener("click", closeCart);
     dom.overlay.addEventListener("click", closeCart);

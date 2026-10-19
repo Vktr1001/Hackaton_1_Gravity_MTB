@@ -45,8 +45,8 @@
     createCart({ catalog: CATALOG, storage, onStorageError });
 
   // Artículos de referencia
-  const GLOVES = CATALOG.find((item) => item.id === "gloves-grip");      // $690, producto
-  const HELMET = CATALOG.find((item) => item.id === "helmet-fullface");  // $7,850, producto
+  const GLOVES = CATALOG.find((item) => item.id === "as-a-dura-gloves");       // $869, producto
+  const HELMET = CATALOG.find((item) => item.id === "as-missile-tech-helmet"); // $7,399, producto
   const SHUTTLE = CATALOG.find((item) => item.id === "service-shuttle"); // $950, servicio
 
   /* ---------------- Casos ---------------- */
@@ -100,16 +100,16 @@
 
   test("Cobra envío si el subtotal es menor a $3,000", () => {
     const cart = newCart();
-    cart.add(GLOVES.id); // $690
+    cart.add(GLOVES.id); // menos de $3,000
     const summary = cart.getSummary();
     assertEqual(summary.shipping, SHIPPING_COST, "envío");
-    assertEqual(summary.total, 690 + SHIPPING_COST, "total");
-    assertEqual(summary.missingForFreeShipping, FREE_SHIPPING_FROM - 690, "faltante");
+    assertEqual(summary.total, GLOVES.price + SHIPPING_COST, "total");
+    assertEqual(summary.missingForFreeShipping, FREE_SHIPPING_FROM - GLOVES.price, "faltante");
   });
 
   test("Envío gratis desde $3,000", () => {
     const cart = newCart();
-    cart.add(HELMET.id); // $7,850
+    cart.add(HELMET.id); // más de $3,000
     assertEqual(cart.getSummary().shipping, 0, "envío");
   });
 

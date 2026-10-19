@@ -1,143 +1,190 @@
 /**
  * Catálogo de Gravity MTB.
  *
+ * Precios en MXN convertidos del precio de lista (referencia, oct. 2026):
+ *   bicis YT en EUR a 20.67 MXN/EUR + 25% (importación y armado);
+ *   el resto en USD.
+ *
  * Productos y servicios comparten la misma estructura para que el carrito
  * los trate igual. Campos:
  *   id        identificador único (se guarda en LocalStorage)
  *   type      "product" | "service" (los servicios no pagan envío)
+ *   brand     marca (opcional, solo productos)
  *   category  usada por los filtros y para el color de la tarjeta
  *   level     nivel de pista: green | blue | black | double
- *   art       nombre de la ilustración en js/art.js
+ *   image     foto oficial (productos)
+ *   art       ilustración SVG en js/art.js (servicios, que no tienen foto)
  *   price     precio unitario en MXN
+ *   oldPrice  precio anterior si está en oferta (opcional)
  *   stock     máximo de piezas que se pueden agregar
  */
 const CATALOG = Object.freeze([
-  // ---------- Bicis ----------
+  // ---------- Bicis (YT Industries) ----------
   {
-    id: "bike-descenso-pro",
+    id: "yt-tues-core2",
     type: "product",
     category: "bicis",
-    name: "Descenso Pro 29",
-    description: "Cuadro de carbono pensado para copas de DH y pistas rotas.",
-    specs: ["200 mm", "Carbono", "29\""],
+    brand: "YT Industries",
+    name: "Tues Core 2 Mullet",
+    description: "Bici de downhill con cuadro de carbono, Boxxer y shock de resorte Vivid.",
+    specs: ["200 mm", "Carbono", "Downhill"],
     level: "double",
-    tag: "Nuevo",
-    art: "bike",
-    price: 89900,
+    image: "img/products/yt-tues-core2.png",
+    price: 111100,
     stock: 3
   },
   {
-    id: "bike-freeride-mullet",
+    id: "yt-capra-core1",
     type: "product",
     category: "bicis",
-    name: "Freeride Mullet",
-    description: "Rueda 29 adelante, 27.5 atrás: estabilidad y giro rápido.",
-    specs: ["180 mm", "Aluminio", "MX"],
+    brand: "YT Industries",
+    name: "Capra Core 1",
+    description: "Enduro de aluminio con suspensión Marzocchi Bomber: sube y baja como bici de park.",
+    specs: ["170 mm", "Aluminio", "MX 29"],
     level: "black",
-    art: "bike",
-    price: 54500,
-    stock: 5
-  },
-  {
-    id: "bike-park-start",
-    type: "product",
-    category: "bicis",
-    name: "Park Start 27.5",
-    description: "Tu primera bici de bike park, robusta y fácil de manejar.",
-    specs: ["160 mm", "Aluminio", "27.5\""],
-    level: "blue",
-    art: "bike",
-    price: 32900,
-    stock: 6
-  },
-
-  // ---------- Protección ----------
-  {
-    id: "helmet-fullface",
-    type: "product",
-    category: "proteccion",
-    name: "Casco Integral Carbon",
-    description: "Certificado ASTM F1952 para descenso, con sistema MIPS.",
-    specs: ["ASTM DH", "MIPS", "980 g"],
-    level: "green",
-    tag: "Top ventas",
-    art: "helmet",
-    price: 7850,
-    stock: 10
-  },
-  {
-    id: "goggles-mud",
-    type: "product",
-    category: "proteccion",
-    name: "Goggles Lodo Pro",
-    description: "Mica antiempañante con tear-offs para días de lodo.",
-    specs: ["Anti-fog", "Tear-off"],
-    level: "green",
-    art: "goggles",
-    price: 1450,
-    stock: 15
-  },
-  {
-    id: "armor-body",
-    type: "product",
-    category: "proteccion",
-    name: "Peto Body Shield",
-    description: "Protección de pecho y espalda nivel 2, ventilada.",
-    specs: ["CE Nivel 2", "Espalda"],
-    level: "blue",
-    art: "armor",
-    price: 3900,
-    stock: 8
-  },
-  {
-    id: "gloves-grip",
-    type: "product",
-    category: "proteccion",
-    name: "Guantes Grip DH",
-    description: "Palma delgada para sentir el manubrio, nudillos reforzados.",
-    specs: ["Touch", "Refuerzo"],
-    level: "green",
-    art: "gloves",
-    price: 690,
-    stock: 20
-  },
-
-  // ---------- Componentes ----------
-  {
-    id: "fork-dual-crown",
-    type: "product",
-    category: "componentes",
-    name: "Horquilla Doble Corona",
-    description: "Barras de 38 mm y cartucho de amortiguación ajustable.",
-    specs: ["200 mm", "38 mm", "Aire"],
-    level: "double",
-    art: "fork",
-    price: 21900,
+    tag: "Best seller",
+    image: "img/products/yt-capra-core1.png",
+    price: 72300,
     stock: 4
   },
   {
-    id: "tire-dh",
+    id: "yt-jeffsy-core2-al",
     type: "product",
-    category: "componentes",
-    name: "Llanta Gravity DH 29 x 2.5",
-    description: "Carcasa doble y compuesto suave para agarre en raíces.",
-    specs: ["DH casing", "Tubeless"],
+    category: "bicis",
+    brand: "YT Industries",
+    name: "Jeffsy Core 2 AL",
+    description: "All mountain de aluminio con suspensión Fox 36 y Float X.",
+    specs: ["150/145 mm", "Aluminio", "29\""],
+    level: "blue",
+    tag: "Oferta",
+    image: "img/products/yt-jeffsy-core2-al.png",
+    price: 63300,
+    oldPrice: 90400,
+    stock: 5
+  },
+
+  // ---------- Protección (Alpinestars) ----------
+  {
+    id: "as-missile-tech-helmet",
+    type: "product",
+    category: "proteccion",
+    brand: "Alpinestars",
+    name: "Missile Tech Solid Helmet",
+    description: "Casco integral de downhill con MIPS, 22 ventilas y liberación de emergencia.",
+    specs: ["MIPS", "22 ventilas", "ERS"],
+    level: "green",
+    tag: "Best seller",
+    image: "img/products/as-missile-tech-helmet.png",
+    price: 7399,
+    stock: 10
+  },
+  {
+    id: "as-plasma-knee",
+    type: "product",
+    category: "proteccion",
+    brand: "Alpinestars",
+    name: "A-Impact Plasma Elite Shield Knee",
+    description: "Rodilleras con inserto viscoelástico PLASMA y concha TPU contra rocas.",
+    specs: ["EN 1621-1 Nivel 2", "Concha TPU"],
+    level: "blue",
+    image: "img/products/as-plasma-knee.png",
+    price: 3249,
+    stock: 8
+  },
+  {
+    id: "as-plasma-elbow",
+    type: "product",
+    category: "proteccion",
+    brand: "Alpinestars",
+    name: "A-Impact Plasma Elite Shield Elbow",
+    description: "Coderas con doble correa y forro de silicón para que no se muevan.",
+    specs: ["EN 1621-1 Nivel 2", "Concha TPU"],
     level: "black",
-    art: "tire",
-    price: 1350,
+    image: "img/products/as-plasma-elbow.png",
+    price: 2849,
+    stock: 8
+  },
+  {
+    id: "as-a5-plasma-chest",
+    type: "product",
+    category: "proteccion",
+    brand: "Alpinestars",
+    name: "A-5 Plasma Chest Protector",
+    description: "Peto con protección de pecho y espalda sobre chasis de malla 3D ventilada.",
+    specs: ["CE Nivel 2", "Pecho + espalda"],
+    level: "double",
+    tag: "Best seller",
+    image: "img/products/as-a5-plasma-chest.png",
+    price: 4249,
+    stock: 6
+  },
+  {
+    id: "as-a-dura-gloves",
+    type: "product",
+    category: "proteccion",
+    brand: "Alpinestars",
+    name: "A-Dura Gloves",
+    description: "Guantes con puño de neopreno, cierre de velcro y dedos táctiles.",
+    specs: ["Touch", "Neopreno"],
+    level: "green",
+    image: "img/products/as-a-dura-gloves.png",
+    price: 869,
     stock: 20
   },
   {
-    id: "pedals-flat",
+    id: "as-vision5-goggles",
+    type: "product",
+    category: "proteccion",
+    brand: "Alpinestars",
+    name: "Vision 5 Corp Goggles",
+    description: "Mica espejo antiempañante, marco flexible A-FLEX y ventilación RAM-AIR.",
+    specs: ["Mica espejo", "Anti-fog"],
+    level: "green",
+    image: "img/products/as-vision5-goggles.png",
+    price: 1099,
+    stock: 15
+  },
+
+  // ---------- Componentes (Fox y Maxxis) ----------
+  {
+    id: "fox-40-factory",
     type: "product",
     category: "componentes",
-    name: "Pedales Plataforma Mg",
-    description: "Magnesio, 10 pines por lado y perfil cóncavo.",
-    specs: ["Magnesio", "20 pines"],
+    brand: "Fox Factory",
+    name: "FOX 40 Factory",
+    description: "La horquilla doble corona más ganadora de la Copa del Mundo de DH.",
+    specs: ["203 mm", "GRIP X2", "Kashima"],
+    level: "double",
+    image: "img/products/fox-40-factory.png",
+    price: 36990,
+    stock: 3
+  },
+  {
+    id: "fox-dhx2",
+    type: "product",
+    category: "componentes",
+    brand: "Fox Factory",
+    name: "FOX DHX2",
+    description: "Shock de resorte monotubo con 4 ajustes externos de compresión y rebote.",
+    specs: ["Coil", "4 ajustes", "Eje ½\""],
+    level: "black",
+    tag: "Best seller",
+    image: "img/products/fox-dhx2.png",
+    price: 11990,
+    stock: 5
+  },
+  {
+    id: "maxxis-minion-dhx",
+    type: "product",
+    category: "componentes",
+    brand: "Maxxis",
+    name: "Minion DHX 29 x 2.50",
+    description: "Carcasa NEW DH y compuesto 3C MaxxGrip para máximo agarre. Ref. TB00659800.",
+    specs: ["NEW DH", "MaxxGrip", "Tubeless"],
     level: "blue",
-    art: "pedal",
-    price: 1890,
-    stock: 12
+    image: "img/products/maxxis-minion-dhx.jpg",
+    price: 1749,
+    stock: 20
   },
 
   // ---------- Servicios ----------
