@@ -1,0 +1,1537 @@
+/* =====================================================================
+   GRAVITY MTB — Hoja de estilos principal
+   ---------------------------------------------------------------------
+   Índice
+   1.  Variables de diseño (tokens)
+   2.  Reset y estilos base
+   3.  Utilidades reutilizables
+   4.  Botones, chips e inputs
+   5.  Encabezado y navegación
+   6.  Altímetro (progreso de scroll)
+   7.  Hero
+   8.  Secciones genéricas
+   9.  Tarjetas de producto y servicio
+   10. Niveles de pista (badges)
+   11. Características y newsletter
+   12. Pie de página
+   13. Carrito lateral
+   14. Notificaciones (toasts) y animaciones
+   15. Responsive
+   16. Movimiento reducido
+   ===================================================================== */
+
+
+/* =====================================================================
+   1. VARIABLES DE DISEÑO
+   ===================================================================== */
+:root {
+  /* Paleta: tierra oscura + naranja de alta visibilidad */
+  --clr-bg: #0d0f0e;
+  --clr-surface: #161a18;
+  --clr-surface-2: #1f2421;
+  --clr-line: #2c332f;
+  --clr-text: #f2efe8;
+  --clr-muted: #9aa39e;
+  --clr-accent: #ff5b14;
+  --clr-accent-dark: #d94300;
+  --clr-light: #f2efe8;
+  --clr-light-text: #1b1f1d;
+  --clr-success: #3ddc84;
+  --clr-error: #ff4d4f;
+
+  /* Colores de niveles de pista (estándar de bike park) */
+  --clr-green: #2fbf71;
+  --clr-blue: #2f7bff;
+  --clr-black: #0b0b0b;
+
+  /* Tipografía */
+  --ff-display: "Anton", "Impact", "Arial Narrow", sans-serif;
+  --ff-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --fs-sm: 0.875rem;
+  --fs-base: 1rem;
+  --fs-lg: 1.125rem;
+  --fs-h3: 1.5rem;
+  --fs-h2: clamp(2.25rem, 5vw, 3.5rem);
+  --fs-h1: clamp(3rem, 9vw, 6.5rem);
+
+  /* Espaciado y forma */
+  --space-xs: 0.5rem;
+  --space-sm: 1rem;
+  --space-md: 1.5rem;
+  --space-lg: 2.5rem;
+  --space-xl: 5rem;
+  --radius: 14px;
+  --radius-pill: 999px;
+  --container: 1200px;
+  --header-h: 72px;
+
+  /* Movimiento */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-fast: 0.2s;
+  --dur: 0.4s;
+
+  /* Inclinación de las secciones (pendiente "downhill") */
+  --slope: 4vw;
+}
+
+
+/* =====================================================================
+   2. RESET Y ESTILOS BASE
+   ===================================================================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: var(--header-h);
+}
+
+body {
+  margin: 0;
+  font-family: var(--ff-body);
+  font-size: var(--fs-base);
+  line-height: 1.6;
+  color: var(--clr-text);
+  background-color: var(--clr-bg);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* Bloquea el scroll del fondo cuando el carrito está abierto */
+body.is-locked {
+  overflow: hidden;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-family: var(--ff-display);
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 3px solid var(--clr-accent);
+  outline-offset: 3px;
+}
+
+
+/* =====================================================================
+   3. UTILIDADES REUTILIZABLES
+   ===================================================================== */
+.container {
+  width: min(100% - 2rem, var(--container));
+  margin-inline: auto;
+}
+
+.text-accent {
+  color: var(--clr-accent);
+}
+
+/* Oculta visualmente, pero mantiene el texto para lectores de pantalla */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: var(--space-sm);
+  z-index: 100;
+  padding: var(--space-xs) var(--space-sm);
+  background: var(--clr-accent);
+  color: #000;
+  font-weight: 700;
+}
+
+.skip-link:focus {
+  top: var(--space-sm);
+}
+
+.eyebrow {
+  margin-bottom: var(--space-xs);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--clr-accent);
+}
+
+.notice {
+  padding: var(--space-md);
+  border: 1px dashed var(--clr-line);
+  border-radius: var(--radius);
+  text-align: center;
+  color: var(--clr-muted);
+}
+
+/* Animación de aparición al hacer scroll (la activa JS con .is-visible) */
+.reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+
+/* =====================================================================
+   4. BOTONES, CHIPS E INPUTS
+   ===================================================================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  padding: 0.85rem 1.6rem;
+  border: 2px solid transparent;
+  border-radius: var(--radius-pill);
+  font-weight: 700;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: var(--fs-sm);
+  transition: transform var(--dur-fast) var(--ease-out),
+              background-color var(--dur-fast),
+              color var(--dur-fast),
+              border-color var(--dur-fast);
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.btn:active {
+  transform: translateY(0) scale(0.97);
+}
+
+.btn--primary {
+  background: var(--clr-accent);
+  color: #0d0f0e;
+}
+
+.btn--primary:hover {
+  background: var(--clr-accent-dark);
+  color: var(--clr-text);
+}
+
+.btn--ghost {
+  border-color: currentColor;
+  color: var(--clr-text);
+  background: transparent;
+}
+
+.btn--ghost:hover {
+  border-color: var(--clr-accent);
+  color: var(--clr-accent);
+}
+
+.btn--dark {
+  background: var(--clr-bg);
+  color: var(--clr-text);
+}
+
+.btn--dark:hover {
+  background: #000;
+}
+
+.btn--link {
+  padding: var(--space-xs);
+  border: 0;
+  background: none;
+  color: var(--clr-muted);
+  text-decoration: underline;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.btn--link:hover {
+  color: var(--clr-error);
+  transform: none;
+}
+
+.btn--block {
+  width: 100%;
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Botón cuadrado solo con ícono */
+.icon-btn {
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 1px solid var(--clr-line);
+  border-radius: 10px;
+  background: var(--clr-surface-2);
+  color: var(--clr-text);
+  transition: border-color var(--dur-fast), color var(--dur-fast);
+}
+
+.icon-btn:hover {
+  border-color: var(--clr-accent);
+  color: var(--clr-accent);
+}
+
+/* Chips de filtro */
+.chip {
+  padding: 0.5rem 1.1rem;
+  border: 1px solid var(--clr-line);
+  border-radius: var(--radius-pill);
+  background: var(--clr-surface);
+  color: var(--clr-muted);
+  font-weight: 600;
+  font-size: var(--fs-sm);
+  transition: all var(--dur-fast);
+}
+
+.chip:hover {
+  color: var(--clr-text);
+  border-color: var(--clr-muted);
+}
+
+.chip.is-active {
+  background: var(--clr-text);
+  border-color: var(--clr-text);
+  color: var(--clr-bg);
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.85rem 1.2rem;
+  border: 2px solid transparent;
+  border-radius: var(--radius-pill);
+  background: var(--clr-light);
+  color: var(--clr-light-text);
+  font: inherit;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--clr-bg);
+}
+
+.input.is-invalid {
+  border-color: var(--clr-error);
+  animation: shake 0.4s;
+}
+
+.form-error {
+  flex-basis: 100%;
+  min-height: 1.4em;
+  padding-left: 1.2rem;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--clr-bg);
+}
+
+
+/* =====================================================================
+   5. ENCABEZADO Y NAVEGACIÓN
+   ===================================================================== */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  height: var(--header-h);
+  background: rgb(13 15 14 / 0.75);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--dur), background-color var(--dur);
+}
+
+/* JS agrega .is-scrolled al bajar */
+.header.is-scrolled {
+  border-color: var(--clr-line);
+  background: rgb(13 15 14 / 0.92);
+}
+
+.header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  height: 100%;
+}
+
+.header__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  text-decoration: none;
+}
+
+.logo__mark {
+  width: 40px;
+  height: 32px;
+}
+
+.logo__mark path {
+  fill: var(--clr-text);
+}
+
+.logo__mark .logo__trail {
+  fill: none;
+  stroke: var(--clr-accent);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+}
+
+.logo__text {
+  font-family: var(--ff-display);
+  font-size: 1.6rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.nav__list {
+  display: flex;
+  gap: var(--space-md);
+}
+
+.nav__link {
+  position: relative;
+  padding-block: 0.25rem;
+  font-weight: 600;
+  font-size: var(--fs-sm);
+  text-decoration: none;
+  color: var(--clr-muted);
+  transition: color var(--dur-fast);
+}
+
+/* Subrayado animado */
+.nav__link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 2px;
+  background: var(--clr-accent);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform var(--dur) var(--ease-out);
+}
+
+.nav__link:hover,
+.nav__link.is-current {
+  color: var(--clr-text);
+}
+
+.nav__link:hover::after,
+.nav__link.is-current::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* Botón del carrito */
+.cart-btn {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border: 1px solid var(--clr-line);
+  border-radius: 50%;
+  background: var(--clr-surface);
+  color: var(--clr-text);
+  transition: border-color var(--dur-fast);
+}
+
+.cart-btn:hover {
+  border-color: var(--clr-accent);
+}
+
+.cart-btn svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.cart-btn__count {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 22px;
+  height: 22px;
+  padding-inline: 5px;
+  border-radius: var(--radius-pill);
+  background: var(--clr-accent);
+  color: #000;
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 22px;
+  text-align: center;
+}
+
+/* "Rebote" del carrito cuando llega un producto */
+.cart-btn.is-bumping {
+  animation: bump 0.45s var(--ease-out);
+}
+
+/* Botón hamburguesa (oculto en escritorio) */
+.menu-btn {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 46px;
+  height: 46px;
+  padding: 0 12px;
+  border: 1px solid var(--clr-line);
+  border-radius: 50%;
+  background: var(--clr-surface);
+}
+
+.menu-btn__bar {
+  height: 2px;
+  background: var(--clr-text);
+  transition: transform var(--dur), opacity var(--dur);
+}
+
+.menu-btn[aria-expanded="true"] .menu-btn__bar:nth-child(2) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.menu-btn[aria-expanded="true"] .menu-btn__bar:nth-child(3) {
+  opacity: 0;
+}
+
+.menu-btn[aria-expanded="true"] .menu-btn__bar:nth-child(4) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+
+/* =====================================================================
+   6. ALTÍMETRO
+   La altitud baja conforme el usuario hace scroll (JS actualiza --progress)
+   ===================================================================== */
+.altimeter {
+  --progress: 0;
+  position: fixed;
+  top: 50%;
+  right: 1.25rem;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  transform: translateY(-50%);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: var(--clr-muted);
+  pointer-events: none;
+}
+
+.altimeter__value {
+  font-family: var(--ff-display);
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  color: var(--clr-text);
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+}
+
+.altimeter__track {
+  position: relative;
+  width: 2px;
+  height: 180px;
+  background: repeating-linear-gradient(to bottom, var(--clr-line) 0 6px, transparent 6px 12px);
+}
+
+/* Parte ya "descendida" del recorrido */
+.altimeter__track::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: calc(var(--progress) * 100%);
+  background: var(--clr-accent);
+}
+
+.altimeter__rider {
+  position: absolute;
+  left: 50%;
+  top: calc(var(--progress) * 100%);
+  width: 14px;
+  height: 14px;
+  border: 3px solid var(--clr-bg);
+  border-radius: 50%;
+  background: var(--clr-accent);
+  box-shadow: 0 0 0 4px rgb(255 91 20 / 0.25);
+  transform: translate(-50%, -50%);
+}
+
+
+/* =====================================================================
+   7. HERO
+   ===================================================================== */
+.hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: calc(100svh - var(--header-h));
+  padding-block: var(--space-xl) 12rem;
+  overflow: hidden;
+  /* Curvas de nivel topográficas como textura de fondo */
+  background:
+    radial-gradient(ellipse at 70% 10%, rgb(255 91 20 / 0.18), transparent 55%),
+    repeating-radial-gradient(circle at 80% 20%, transparent 0 38px, rgb(255 255 255 / 0.035) 38px 39px),
+    var(--clr-bg);
+}
+
+.hero__content {
+  position: relative;
+  z-index: 2;
+}
+
+.hero__title {
+  max-width: 14ch;
+  font-size: var(--fs-h1);
+  margin-bottom: var(--space-md);
+}
+
+.hero__lead {
+  max-width: 52ch;
+  margin-bottom: var(--space-lg);
+  font-size: var(--fs-lg);
+  color: var(--clr-muted);
+}
+
+.hero__ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+}
+
+.hero__stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-lg);
+  margin: 0;
+}
+
+.stat__label {
+  font-size: var(--fs-sm);
+  color: var(--clr-muted);
+}
+
+.stat__value {
+  margin: 0;
+  font-family: var(--ff-display);
+  font-size: 2.5rem;
+  line-height: 1;
+}
+
+/* Las capas de montaña ocupan la parte baja del hero */
+.hero__mountains {
+  position: absolute;
+  inset: auto 0 0;
+  width: 100%;
+  height: 70%;
+  z-index: 1;
+}
+
+.mountain {
+  transition: transform 0.1s linear;
+}
+
+.mountain--back {
+  fill: #1a1f1c;
+}
+
+.mountain--mid {
+  fill: #141815;
+}
+
+.mountain--front {
+  fill: var(--clr-surface);
+}
+
+/* Línea de bajada que se "dibuja" al cargar */
+.hero__trail {
+  fill: none;
+  stroke: var(--clr-accent);
+  stroke-width: 3;
+  stroke-dasharray: 1200;
+  stroke-dashoffset: 1200;
+  stroke-linecap: round;
+  animation: draw-trail 3s 0.6s var(--ease-out) forwards;
+}
+
+/* Escalonado de entrada para los elementos del hero */
+.hero .reveal:nth-child(2) { transition-delay: 0.1s; }
+.hero .reveal:nth-child(3) { transition-delay: 0.2s; }
+.hero .reveal:nth-child(4) { transition-delay: 0.3s; }
+.hero .reveal:nth-child(5) { transition-delay: 0.4s; }
+
+
+/* =====================================================================
+   8. SECCIONES GENÉRICAS
+   ===================================================================== */
+.section {
+  position: relative;
+  padding-block: var(--space-xl);
+}
+
+/* Borde superior inclinado: cada sección "baja" como una pendiente */
+.section--slope {
+  margin-top: calc(var(--slope) * -1);
+  padding-top: calc(var(--space-xl) + var(--slope));
+  background: var(--clr-surface);
+  clip-path: polygon(0 0, 100% var(--slope), 100% 100%, 0 100%);
+}
+
+.section--light {
+  background: var(--clr-light);
+  color: var(--clr-light-text);
+  clip-path: polygon(0 var(--slope), 100% 0, 100% 100%, 0 100%);
+  padding-top: calc(var(--space-xl) + var(--slope));
+}
+
+.section--light .section__lead {
+  color: #545b57;
+}
+
+.section--accent {
+  background: var(--clr-accent);
+  color: var(--clr-bg);
+}
+
+.section--accent .section__lead {
+  color: rgb(13 15 14 / 0.8);
+}
+
+.section__header {
+  max-width: 720px;
+  margin-bottom: var(--space-lg);
+}
+
+.section__title {
+  font-size: var(--fs-h2);
+  margin-bottom: var(--space-sm);
+}
+
+.section__lead {
+  color: var(--clr-muted);
+  font-size: var(--fs-lg);
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-lg);
+}
+
+.grid {
+  display: grid;
+  gap: var(--space-md);
+}
+
+.grid--products {
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+}
+
+.grid--services {
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+}
+
+
+/* =====================================================================
+   9. TARJETAS DE PRODUCTO Y SERVICIO
+   .card es la base compartida; los modificadores cambian solo lo necesario
+   ===================================================================== */
+.card {
+  --tint: var(--clr-accent);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--clr-line);
+  border-radius: var(--radius);
+  background: var(--clr-bg);
+  overflow: hidden;
+  transition: transform var(--dur) var(--ease-out),
+              border-color var(--dur),
+              box-shadow var(--dur);
+  animation: card-in 0.5s var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * 60ms);
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  border-color: var(--tint);
+  box-shadow: 0 18px 40px -20px var(--tint);
+}
+
+/* Tonos por categoría */
+.card[data-category="bicis"] { --tint: var(--clr-accent); }
+.card[data-category="proteccion"] { --tint: #ffc23d; }
+.card[data-category="componentes"] { --tint: #6fd3ff; }
+.card[data-category="servicios"] { --tint: var(--clr-accent); }
+
+.card__art {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 16 / 10;
+  padding: var(--space-md);
+  background:
+    radial-gradient(circle at 50% 120%, color-mix(in srgb, var(--tint) 35%, transparent), transparent 70%),
+    repeating-linear-gradient(-35deg, transparent 0 14px, rgb(255 255 255 / 0.025) 14px 15px),
+    var(--clr-surface-2);
+  color: var(--tint);
+}
+
+.card__art svg {
+  width: 78%;
+  height: 100%;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 3.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform var(--dur) var(--ease-out);
+}
+
+.card:hover .card__art svg {
+  transform: scale(1.06) rotate(-3deg);
+}
+
+.card__level {
+  position: absolute;
+  top: var(--space-sm);
+  left: var(--space-sm);
+}
+
+.card__tag {
+  position: absolute;
+  top: var(--space-sm);
+  right: var(--space-sm);
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-pill);
+  background: var(--tint);
+  color: #000;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.card__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding: var(--space-md);
+}
+
+.card__title {
+  font-size: var(--fs-h3);
+}
+
+.card__text {
+  font-size: var(--fs-sm);
+  color: var(--clr-muted);
+}
+
+.card__specs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-block: var(--space-xs);
+}
+
+.card__specs li {
+  padding: 0.15rem 0.55rem;
+  border: 1px solid var(--clr-line);
+  border-radius: 6px;
+  font-size: 0.75rem;
+  color: var(--clr-muted);
+}
+
+.card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  margin-top: auto;
+  padding-top: var(--space-sm);
+}
+
+.card__price {
+  font-family: var(--ff-display);
+  font-size: 1.6rem;
+  letter-spacing: 0.02em;
+}
+
+.card__price small {
+  display: block;
+  font-family: var(--ff-body);
+  font-size: 0.7rem;
+  letter-spacing: 0;
+  color: var(--clr-muted);
+}
+
+/* Botón "Agregar": cambia a estado de confirmación tras el clic */
+.add-btn {
+  padding: 0.65rem 1.1rem;
+}
+
+.add-btn.is-added {
+  background: var(--clr-success);
+  color: #000;
+}
+
+/* Variante de servicio sobre fondo claro */
+.card--service {
+  background: #fff;
+  border-color: #e2ddd2;
+  color: var(--clr-light-text);
+}
+
+.card--service .card__art {
+  aspect-ratio: 16 / 8;
+  background:
+    repeating-linear-gradient(-35deg, transparent 0 14px, rgb(0 0 0 / 0.03) 14px 15px),
+    #f7f4ee;
+}
+
+.card--service .card__text,
+.card--service .card__price small {
+  color: #5f6662;
+}
+
+.card--service .card__specs li {
+  border-color: #e2ddd2;
+  color: #5f6662;
+}
+
+
+/* =====================================================================
+   10. NIVELES DE PISTA
+   Íconos de dificultad como en las señales de un bike park
+   ===================================================================== */
+.level {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.2rem 0.6rem 0.2rem 0.45rem;
+  margin: 0.15rem 0.1rem;
+  border-radius: var(--radius-pill);
+  background: rgb(0 0 0 / 0.55);
+  color: #fff;
+  font-family: var(--ff-body);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  vertical-align: middle;
+  backdrop-filter: blur(4px);
+}
+
+/* Forma base del ícono */
+.level::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  background: var(--level-color, #fff);
+}
+
+.level--green { --level-color: var(--clr-green); }
+.level--green::before { border-radius: 50%; }
+
+.level--blue { --level-color: var(--clr-blue); }
+
+.level--black { --level-color: var(--clr-black); }
+.level--black::before {
+  transform: rotate(45deg) scale(0.85);
+  outline: 1.5px solid #fff;
+}
+
+/* Doble diamante: un rombo con su "sombra" desplazada */
+.level--double { --level-color: var(--clr-black); }
+.level--double::before {
+  margin-right: 6px;
+  transform: rotate(45deg) scale(0.85);
+  outline: 1.5px solid #fff;
+  box-shadow: 7px -7px 0 var(--clr-black), 7px -7px 0 1.5px #fff;
+}
+
+
+/* =====================================================================
+   11. CARACTERÍSTICAS Y NEWSLETTER
+   ===================================================================== */
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--space-md);
+}
+
+.feature {
+  padding: var(--space-md);
+  border-top: 2px solid var(--clr-line);
+  transition: border-color var(--dur);
+}
+
+.feature:hover {
+  border-color: var(--clr-accent);
+}
+
+.feature__num {
+  font-family: var(--ff-display);
+  font-size: 2.5rem;
+  color: var(--clr-accent);
+}
+
+.feature__title {
+  margin-block: var(--space-xs);
+  font-size: var(--fs-h3);
+}
+
+.feature__text {
+  color: var(--clr-muted);
+}
+
+.newsletter {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: var(--space-lg);
+}
+
+.newsletter__form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+
+
+/* =====================================================================
+   12. PIE DE PÁGINA
+   ===================================================================== */
+.footer {
+  padding-block: var(--space-lg);
+  border-top: 1px solid var(--clr-line);
+  font-size: var(--fs-sm);
+  color: var(--clr-muted);
+}
+
+.footer__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+}
+
+
+/* =====================================================================
+   13. CARRITO LATERAL
+   ===================================================================== */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: rgb(0 0 0 / 0.6);
+  backdrop-filter: blur(3px);
+  animation: fade-in var(--dur) both;
+}
+
+.cart {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 70;
+  display: flex;
+  flex-direction: column;
+  width: min(420px, 100%);
+  height: 100%;
+  background: var(--clr-surface);
+  border-left: 1px solid var(--clr-line);
+  transform: translateX(100%);
+  visibility: hidden;
+  transition: transform var(--dur) var(--ease-out), visibility var(--dur);
+}
+
+.cart.is-open {
+  transform: none;
+  visibility: visible;
+}
+
+.cart__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-md);
+  border-bottom: 1px solid var(--clr-line);
+}
+
+.cart__title {
+  font-size: 1.8rem;
+}
+
+.shipping-meter {
+  padding: var(--space-sm) var(--space-md);
+  border-bottom: 1px solid var(--clr-line);
+  font-size: var(--fs-sm);
+}
+
+.shipping-meter__text {
+  margin-bottom: var(--space-xs);
+  color: var(--clr-muted);
+}
+
+.shipping-meter__text strong {
+  color: var(--clr-text);
+}
+
+.shipping-meter__bar {
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background: var(--clr-line);
+  overflow: hidden;
+}
+
+.shipping-meter__bar span {
+  display: block;
+  width: 0;
+  height: 100%;
+  background: linear-gradient(90deg, var(--clr-accent), #ffc23d);
+  transition: width 0.6s var(--ease-out);
+}
+
+.cart__list {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-sm) var(--space-md);
+}
+
+.cart-item {
+  display: grid;
+  grid-template-columns: 64px 1fr auto;
+  align-items: center;
+  gap: var(--space-sm);
+  padding-block: var(--space-sm);
+  border-bottom: 1px solid var(--clr-line);
+  animation: slide-in 0.35s var(--ease-out) both;
+}
+
+.cart-item.is-removing {
+  animation: slide-out 0.3s ease-in forwards;
+}
+
+.cart-item__art {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 10px;
+  background: var(--clr-surface-2);
+  color: var(--clr-accent);
+}
+
+.cart-item__art svg {
+  width: 85%;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.cart-item__name {
+  font-weight: 600;
+  font-size: var(--fs-sm);
+  line-height: 1.3;
+}
+
+.cart-item__price {
+  font-size: 0.8rem;
+  color: var(--clr-muted);
+}
+
+.cart-item__side {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.35rem;
+}
+
+.qty {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--clr-line);
+  border-radius: var(--radius-pill);
+}
+
+.qty__btn {
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--clr-text);
+  font-weight: 700;
+}
+
+.qty__btn:hover:not(:disabled) {
+  color: var(--clr-accent);
+}
+
+.qty__btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.qty__value {
+  min-width: 1.6rem;
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  text-align: center;
+}
+
+.cart-item__remove {
+  border: 0;
+  background: none;
+  color: var(--clr-muted);
+  font-size: 0.75rem;
+  text-decoration: underline;
+}
+
+.cart-item__remove:hover {
+  color: var(--clr-error);
+}
+
+.cart__empty {
+  display: grid;
+  place-items: center;
+  gap: var(--space-sm);
+  flex: 1;
+  padding: var(--space-lg);
+  text-align: center;
+  color: var(--clr-muted);
+}
+
+.cart__footer {
+  padding: var(--space-md);
+  border-top: 1px solid var(--clr-line);
+  background: var(--clr-bg);
+}
+
+.cart__totals {
+  margin: 0 0 var(--space-sm);
+}
+
+.cart__totals div {
+  display: flex;
+  justify-content: space-between;
+  padding-block: 0.2rem;
+  color: var(--clr-muted);
+}
+
+.cart__totals dd {
+  margin: 0;
+}
+
+.cart__totals .cart__total {
+  margin-top: var(--space-xs);
+  padding-top: var(--space-xs);
+  border-top: 1px dashed var(--clr-line);
+  font-family: var(--ff-display);
+  font-size: 1.5rem;
+  color: var(--clr-text);
+}
+
+/* Muestra/oculta piezas del carrito según su estado (JS pone data-empty) */
+.cart[data-empty="true"] .cart__list,
+.cart[data-empty="true"] .cart__footer,
+.cart[data-empty="false"] .cart__empty {
+  display: none;
+}
+
+/* Clon del producto que "vuela" hacia el carrito */
+.fly-item {
+  position: fixed;
+  z-index: 90;
+  pointer-events: none;
+  color: var(--clr-accent);
+}
+
+.fly-item svg {
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+
+/* =====================================================================
+   14. NOTIFICACIONES Y ANIMACIONES
+   ===================================================================== */
+.toasts {
+  position: fixed;
+  left: 50%;
+  bottom: var(--space-md);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  width: min(92%, 420px);
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  width: 100%;
+  padding: 0.8rem 1.1rem;
+  border-left: 4px solid var(--clr-success);
+  border-radius: 10px;
+  background: var(--clr-surface-2);
+  box-shadow: 0 12px 30px rgb(0 0 0 / 0.45);
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  animation: toast-in 0.35s var(--ease-out) both;
+}
+
+.toast--error {
+  border-color: var(--clr-error);
+}
+
+.toast--info {
+  border-color: var(--clr-accent);
+}
+
+.toast.is-leaving {
+  animation: toast-out 0.3s ease-in forwards;
+}
+
+@keyframes draw-trail {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes card-in {
+  from { opacity: 0; transform: translateY(24px) scale(0.98); }
+}
+
+@keyframes bump {
+  0%, 100% { transform: scale(1); }
+  40% { transform: scale(1.25) rotate(-8deg); }
+  70% { transform: scale(0.92); }
+}
+
+@keyframes shake {
+  25% { transform: translateX(-6px); }
+  50% { transform: translateX(6px); }
+  75% { transform: translateX(-3px); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+}
+
+@keyframes slide-in {
+  from { opacity: 0; transform: translateX(30px); }
+}
+
+@keyframes slide-out {
+  to { opacity: 0; transform: translateX(60px); }
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(20px); }
+}
+
+@keyframes toast-out {
+  to { opacity: 0; transform: translateY(20px); }
+}
+
+
+/* =====================================================================
+   15. RESPONSIVE
+   ===================================================================== */
+
+/* Tablet y móvil: menú desplegable y altímetro como barra superior */
+@media (max-width: 860px) {
+  .menu-btn {
+    display: flex;
+  }
+
+  .nav {
+    position: absolute;
+    top: var(--header-h);
+    left: 0;
+    right: 0;
+    padding: var(--space-md) var(--space-sm);
+    background: var(--clr-bg);
+    border-bottom: 1px solid var(--clr-line);
+    transform: translateY(-12px);
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--dur) var(--ease-out);
+  }
+
+  .nav.is-open {
+    transform: none;
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .nav__list {
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .nav__link {
+    font-size: var(--fs-lg);
+  }
+
+  .newsletter {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Sin espacio lateral libre: el altímetro se vuelve una barra de progreso
+   horizontal bajo el encabezado para no tapar el contenido */
+@media (max-width: 1359px) {
+  .altimeter {
+    top: var(--header-h);
+    right: 0;
+    left: 0;
+    transform: none;
+  }
+
+  .altimeter__label,
+  .altimeter__value {
+    display: none;
+  }
+
+  .altimeter__track {
+    width: 100%;
+    height: 3px;
+    background: transparent;
+  }
+
+  .altimeter__track::before {
+    inset: 0 auto 0 0;
+    width: calc(var(--progress) * 100%);
+    height: 100%;
+  }
+
+  .altimeter__rider {
+    display: none;
+  }
+}
+
+/* Móvil pequeño */
+@media (max-width: 520px) {
+  :root {
+    --space-xl: 3.5rem;
+  }
+
+  .hero {
+    padding-bottom: 9rem;
+  }
+
+  .hero__stats {
+    gap: var(--space-md);
+  }
+
+  .stat__value {
+    font-size: 2rem;
+  }
+
+  .newsletter__form .btn {
+    width: 100%;
+  }
+}
+
+
+/* =====================================================================
+   16. MOVIMIENTO REDUCIDO
+   Respeta la preferencia del sistema de minimizar animaciones
+   ===================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+
+  .hero__trail {
+    stroke-dashoffset: 0;
+  }
+}

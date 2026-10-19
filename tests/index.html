@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gravity MTB | Pruebas del carrito</title>
+  <style>
+    /* Estilos mínimos para leer los resultados */
+    body { margin: 2rem; font-family: system-ui, sans-serif; background: #0d0f0e; color: #f2efe8; }
+    h1 { font-size: 1.5rem; }
+    .summary { font-weight: 700; margin-bottom: 1rem; }
+    .pass { color: #3ddc84; }
+    .fail { color: #ff4d4f; }
+    li { margin: 0.3rem 0; }
+    code { color: #9aa39e; }
+  </style>
+</head>
+<body>
+  <h1>Pruebas unitarias del carrito</h1>
+  <p class="summary" id="summary">Ejecutando…</p>
+  <ul id="results"></ul>
+
+  <!-- Se prueba el mismo código que usa la tienda -->
+  <script src="../js/products.js"></script>
+  <script src="../js/cart.js"></script>
+  <script src="cart.test.js"></script>
+</body>
+</html>
